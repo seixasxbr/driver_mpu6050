@@ -117,7 +117,7 @@ void loop()
 //    pub_Gy.publish(&Gy);
 //    pub_Gz.publish(&Gz);
 
-    imu.angular_velocity.x = GyX/131*0.0174533;
+//    imu.angular_velocity.x = GyX/131*0.0174533;
 //    imu.angular_velocity.y = GyY/131*0.0174533;
 //    imu.angular_velocity.z = GyZ/131*0.0174533;
 

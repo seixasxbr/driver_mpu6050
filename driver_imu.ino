@@ -8,24 +8,31 @@
 #include <ros.h>
 #include <std_msgs/Float32.h>
 #include <Arduino.h>
+#include <sensor_msgs/Imu.h>
+
 
 ros::NodeHandle nh;
-std_msgs::Float32 Ax;
-ros::Publisher pub_Ax("Ax", &Ax);
+//std_msgs::Float32 Ax;
+//ros::Publisher pub_Ax("Ax", &Ax);
 
-std_msgs::Float32 Ay;
-ros::Publisher pub_Ay("Ay", &Ay);
+//std_msgs::Float32 Ay;
+//ros::Publisher pub_Ay("Ay", &Ay);
+//
+//std_msgs::Float32 Az;
+//std_msgs::Float32 Gx;
+//std_msgs::Float32 Gy;
+//std_msgs::Float32 Gz;
 
-std_msgs::Float32 Az;
-std_msgs::Float32 Gx;
-std_msgs::Float32 Gy;
-std_msgs::Float32 Gz;
 
+//ros::Publisher pub_Az("Az", &Az);
+//ros::Publisher pub_Gx("Gx", &Gx);
+//ros::Publisher pub_Gy("Gy", &Gy);
+//ros::Publisher pub_Gz("Gz", &Gz);
 
-ros::Publisher pub_Az("Az", &Az);
-ros::Publisher pub_Gx("Gx", &Gx);
-ros::Publisher pub_Gy("Gy", &Gy);
-ros::Publisher pub_Gz("Gz", &Gz);
+sensor_msgs::Imu imu;
+//ros::Publisher imu_pub = nh.advertise<sensor_msgs::Imu>("data", 50);
+ros::Publisher pub_imu("imu", &imu);
+
 
 //Endereco I2C do MPU6050
 const int MPU=0x68;  
@@ -49,12 +56,13 @@ void setup()
   Wire.endTransmission(true);
   nh.getHardware()->setBaud(57600);
   nh.initNode();
-  nh.advertise(pub_Ax);
-  nh.advertise(pub_Ay);
-  nh.advertise(pub_Az);
-  nh.advertise(pub_Gx);
-  nh.advertise(pub_Gy);
-  nh.advertise(pub_Gz);
+//  nh.advertise(pub_Ax);
+//  nh.advertise(pub_Ay);
+//  nh.advertise(pub_Az);
+//  nh.advertise(pub_Gx);
+//  nh.advertise(pub_Gy);
+//  nh.advertise(pub_Gz);
+  nh.advertise(pub_imu);
     
 }
 void loop()
@@ -95,20 +103,29 @@ void loop()
   
   if (tempoAtual - tempoAnterior >= PERIODO) {
     tempoAnterior = tempoAtual;
-    Ax.data = AcX/16384*9.80665;  
-    pub_Ax.publish(&Ax);
-    Ay.data = AcY/16384*9.80665; 
-    pub_Ay.publish(&Ay);
-    Az.data = AcZ/16384*9.80665; 
-    Gx.data = GyX/131*0.0174533;  
-    Gy.data = GyY/131*0.0174533; 
-    Gz.data = GyZ/131*0.0174533;
+//    Ax.data = AcX/16384*9.80665;  
+//    pub_Ax.publish(&Ax);
+//    Ay.data = AcY/16384*9.80665; 
+//    pub_Ay.publish(&Ay);
+//    Az.data = AcZ/16384*9.80665; 
+//    Gx.data = GyX/131*0.0174533;  
+//    Gy.data = GyY/131*0.0174533; 
+//    Gz.data = GyZ/131*0.0174533;
+//
+//    pub_Az.publish(&Az);
+//    pub_Gx.publish(&Gx);
+//    pub_Gy.publish(&Gy);
+//    pub_Gz.publish(&Gz);
 
-    
-    pub_Az.publish(&Az);
-    pub_Gx.publish(&Gx);
-    pub_Gy.publish(&Gy);
-    pub_Gz.publish(&Gz);
+    imu.angular_velocity.x = GyX/131*0.0174533;
+//    imu.angular_velocity.y = GyY/131*0.0174533;
+//    imu.angular_velocity.z = GyZ/131*0.0174533;
+
+//    imu.linear_acceleration.x = AcX/16384*9.80665;
+//    imu.linear_acceleration.y = AcY/16384*9.80665;
+//    imu.linear_acceleration.z = AcZ/16384*9.80665;
+
+    pub_imu.publish(&imu);
     } 
 
   nh.spinOnce();
